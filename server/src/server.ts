@@ -51,10 +51,21 @@ app.get("/games/:id/ads", async (request, response) => {
     }));
   }); // list ads by game
 
-app.get("/ads/:id/discord", (request, response) => {
-  // const adsId = req.params.id;
+app.get("/ads/:id/discord", async (request, response) => {
+  const adId = request.params.id;
+    const ad = await prisma.ad.findUniqueOrThrow({
+        select:{
+            discord: true,
+        },
+        where: {
+            id: adId,
+        },
+        
+    })
 
-  return response.json([]);
+  return response.json({
+    discord: ad.discord,
+  });
 }); //show discord
 
 app.listen(3333);
